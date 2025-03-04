@@ -1,0 +1,5 @@
+bin/woodpecker-server
+@sample etc/rc.conf.d/woodpecker-server.sample
+@dir etc/rc.conf.d
+@dir(woodpecker,woodpecker,755) /var/db/woodpecker
+@dir(woodpecker,woodpecker,755) /var/db/woodpecker/server

@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# PROVIDE: woodpecker_agent
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="woodpecker_agent"
+rcvar="${name}_enable"
+
+load_rc_config woodpecker-agent
+
+: ${woodpecker_agent_enable:="NO"}
+: ${woodpecker_agent_user:="woodpecker"}
+: ${woodpecker_agent_group:="woodpecker"}
+: ${woodpecker_agent_log:="/var/log/woodpecker/agent.log"}
+: ${woodpecker_agent_chdir:="/var/db/woodpecker/agent"}
+
+command="/usr/sbin/daemon"
+task="/usr/local/bin/woodpecker-agent"
+pidfile="/var/run/woodpecker/agent.pid"
+procname="${task}"
+
+command_args="-p ${pidfile} ${task} --log-file ${woodpecker_agent_log}"
+
+start_precmd="${name}_prestart"
+
+woodpecker_agent_prestart() {
+    if [ ! -d "${woodpecker_agent_chdir}" ]; then
+        mkdir -p "${woodpecker_agent_chdir}"
+	chown ${woodpecker_agent_user} "/var/db/woodpecker"
+        chown ${woodpecker_agent_user} "${woodpecker_agent_chdir}"
+    fi
+
+    if [ ! -d "/var/log/woodpecker" ]; then
+	mkdir "/var/log/woodpecker"
+	chown ${woodpecker_agent_user} "/var/log/woodpecker"
+    fi
+
+    if [ ! -f "${woodpecker_agent_log}" ]; then
+        touch "${woodpecker_agent_log}"
+        chown ${woodpecker_agent_user}:${woodpecker_agent_group} "${woodpecker_agent_log}"
+        chmod 640 "${woodpecker_agent_log}"
+    fi
+
+    if [ ! -d "/var/run/woodpecker" ] ; then
+        install -d -o ${woodpecker_agent_user} -g ${woodpecker_agent_group} "/var/run/woodpecker"
+    fi
+}
+
+run_rc_command "$1"

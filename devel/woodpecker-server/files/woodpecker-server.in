@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# PROVIDE: woodpecker_server
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="woodpecker_server"
+rcvar="${name}_enable"
+
+load_rc_config woodpecker-server
+
+: ${woodpecker_server_enable:="NO"}
+: ${woodpecker_server_user:="woodpecker"}
+: ${woodpecker_server_group:="woodpecker"}
+: ${woodpecker_server_log:="/var/log/woodpecker/server.log"}
+: ${woodpecker_server_chdir:="/var/db/woodpecker/server"}
+
+command="/usr/sbin/daemon"
+task="/usr/local/bin/woodpecker-server"
+pidfile="/var/run/woodpecker/server.pid"
+procname="${task}"
+
+command_args="-p ${pidfile} ${task} --log-file ${woodpecker_server_log}"
+
+start_precmd="${name}_prestart"
+
+woodpecker_server_prestart() {
+    if [ ! -d "${woodpecker_server_chdir}" ]; then
+        mkdir -p "${woodpecker_server_chdir}"
+	chown ${woodpecker_server_user} "/var/db/woodpecker"
+        chown ${woodpecker_server_user} "${woodpecker_server_chdir}"
+    fi
+
+    if [ ! -d "/var/log/woodpecker" ]; then
+	mkdir "/var/log/woodpecker"
+	chown ${woodpecker_server_user} "/var/log/woodpecker"
+    fi
+
+    if [ ! -f "${woodpecker_server_log}" ]; then
+        touch "${woodpecker_server_log}"
+        chown ${woodpecker_server_user}:${woodpecker_server_group} "${woodpecker_server_log}"
+        chmod 640 "${woodpecker_server_log}"
+    fi
+
+    if [ ! -d "/var/run/woodpecker" ] ; then
+        install -d -o ${woodpecker_server_user} -g ${woodpecker_server_group} "/var/run/woodpecker"
+    fi
+}
+
+run_rc_command "$1"

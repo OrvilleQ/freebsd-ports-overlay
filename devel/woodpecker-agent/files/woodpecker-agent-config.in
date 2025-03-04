@@ -1,0 +1,10 @@
+# Check the documentation for the agent:
+# https://woodpecker-ci.org/docs/administration/agent-config
+
+# Add all required environment variables for your setup in the form of below
+#
+# VARIABLE=value
+# export VARIABLE
+
+WOODPECKER_AGENT_SECRET_FILE=/var/db/woodpecker/agent/agent-secret.conf
+export WOODPECKER_AGENT_SECRET_FILE

@@ -1,0 +1,5 @@
+bin/woodpecker-agent
+@sample etc/rc.conf.d/woodpecker-agent.sample
+@dir etc/rc.conf.d
+@dir(woodpecker,woodpecker,755) /var/db/woodpecker
+@dir(woodpecker,woodpecker,755) /var/db/woodpecker/agent
