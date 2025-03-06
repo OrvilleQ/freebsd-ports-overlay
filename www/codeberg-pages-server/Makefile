@@ -1,6 +1,7 @@
 PORTNAME=	codeberg-pages-server
 DISTVERSIONPREFIX=	v
 DISTVERSION=	6.2.1
+PORTREVISION=	1
 CATEGORIES=	www
 MASTER_SITES=	https://codeberg.org/Codeberg/pages-server/archive/
 DISTFILES=	${DISTVERSIONFULL}.zip
@@ -31,6 +32,13 @@ WRKSRC=		${WRKDIR}/pages-server
 
 USERS=		www
 GROUPS=		www
+
+_USES_fetch+=	799:go-pre-post-fetch
+
+go-pre-post-fetch:
+	@${ECHO_MSG} "===> Patch go.mod"
+	@cd ${DISTDIR}/${DIST_SUBDIR} && \
+		${REINPLACE_CMD} 's|go 1.24.0|go 1.23.0|' go.mod
 
 post-build:
 	@${WRKDIR}/bin/codeberg-pages-server --help | \
