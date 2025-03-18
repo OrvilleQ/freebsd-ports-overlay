@@ -1,6 +1,6 @@
 PORTNAME=	woodpecker-server
 DISTVERSIONPREFIX=	v
-DISTVERSION=	3.3.0
+DISTVERSION=	3.4.0
 CATEGORIES=	devel
 MASTER_SITES=	https://github.com/woodpecker-ci/woodpecker/releases/download/${DISTVERSIONFULL}/
 DISTNAME=	woodpecker-src
