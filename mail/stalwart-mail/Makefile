@@ -1,6 +1,7 @@
 PORTNAME=	stalwart-mail
 DISTVERSIONPREFIX=	v
 DISTVERSION=	0.11.7
+PORTREVISION=	1
 CATEGORIES=	mail
 
 MAINTAINER=	orville@anislet.dev
@@ -21,6 +22,7 @@ USE_GITHUB=	yes
 GH_ACCOUNT=	stalwartlabs
 GH_PROJECT=	mail-server
 GH_TAGNAME=	${DISTVERSIONFULL}
+USE_RC_SUBR=	stalwart-mail
 
 CARGO_FEATURES=	--no-default-features
 
@@ -64,6 +66,9 @@ LIB_DEPENDS+=	librocksdb.so:databases/rocksdb
 .if ${PORT_OPTIONS:MFOUNDATIONDB}
 IGNORE=	FoundationDB is not currently tested.
 .endif
+
+USERS=	stalwart-mail
+GROUPS=	stalwart-mail
 
 post-install:
 	${INSTALL} -m0600 ${WRKSRC}/resources/config/config.toml \
