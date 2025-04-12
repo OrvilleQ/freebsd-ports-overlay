@@ -1,7 +1,7 @@
 PORTNAME=	stalwart-mail
 DISTVERSIONPREFIX=	v
 DISTVERSION=	0.11.7
-PORTREVISION=	3
+PORTREVISION=	4
 CATEGORIES=	mail
 
 MAINTAINER=	orville@anislet.dev
@@ -15,9 +15,14 @@ LICENSE_FILE_AGPLv3=	${WRKSRC}/LICENSES/AGPL-3.0-only.txt
 LICENSE_FILE_SELv1=	${WRKSRC}/LICENSES/LicenseRef-SEL.txt
 LICENSE_PERMS_SELv1=	pkg-mirror auto-accept
 
+BROKEN_powerpc=		ring-v0.16.20 does not support this arch.
+BROKEN_powerpc64=	ring-v0.16.20 does not support this arch.
+BROKEN_powerpc64le=	ring-v0.16.20 does not support this arch.
+BROKEN_riscv64=		ring-v0.16.20 does not support this arch.
+
 LIB_DEPENDS=	libzstd.so:archivers/zstd
 
-USES=		cpe cargo
+USES=		cpe cargo llvm
 USE_GITHUB=	yes
 GH_ACCOUNT=	stalwartlabs
 GH_PROJECT=	mail-server
@@ -59,12 +64,16 @@ SQLITE_VARS=		CARGO_FEATURES+=sqlite
 .include <bsd.port.options.mk>
 
 .if ${PORT_OPTIONS:MROCKS}
-USES+=		llvm
 LIB_DEPENDS+=	librocksdb.so:databases/rocksdb
+BROKEN_powerpc=	rocksdb is 64-bit only.
+BROKEN_i386=	rocksdb is 64-bit only.
+BROKEN_armv6=	rocksdb is 64-bit only.
+BROKEN_armv7=	rocksdb is 64-bit only.
 .endif
 
 .if ${PORT_OPTIONS:MFOUNDATIONDB}
-IGNORE=	FoundationDB is not currently tested.
+BROKEN=		FoundationDB on FreeBSD is currently broken.
+LIB_DEPENDS+=	libfdb_c.so:databases/foundationdb73-client
 .endif
 
 USERS=	stalwart-mail
