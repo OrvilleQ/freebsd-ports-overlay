@@ -43,8 +43,8 @@ stalwart_mail_prestart() {
 		chmod 640 "${stalwart_mail_log}"
 	fi
 
-	if [ ! -d "/var/run/codeberg-pages-server" ] ; then
-		install -d -o ${stalwart_mail_user} -g ${stalwart_mail_group} "/var/run/codeberg-pages-server"
+	if [ ! -d "/var/run/stalwart-mail" ] ; then
+		install -d -o ${stalwart_mail_user} -g ${stalwart_mail_group} "/var/run/stalwart-mail"
 	fi
 }
 
