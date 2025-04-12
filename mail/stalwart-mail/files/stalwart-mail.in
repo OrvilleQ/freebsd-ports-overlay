@@ -14,7 +14,7 @@ load_rc_config stalwart-mail
 : ${stalwart_mail_enable:="NO"}
 : ${stalwart_mail_user:="stalwart-mail"}
 : ${stalwart_mail_group:="stalwart-mail"}
-: ${stalwart_mail_config:="/usr/local/etc/stalwart-mail.toml"}
+: ${stalwart_mail_config:="/usr/local/etc/stalwart-mail/config.toml"}
 : ${stalwart_mail_log:="/var/log/stalwart-mail.log"}
 : ${stalwart_mail_path:="/var/db/stalwart-mail"}
 : ${stalwart_mail_admin_secret:="CHANGEME"}
