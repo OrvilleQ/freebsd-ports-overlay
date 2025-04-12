@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# PROVIDE: stalwart_mail
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="stalwart_mail"
+rcvar="${name}_enable"
+
+load_rc_config stalwart-mail
+
+: ${stalwart_mail_enable:="NO"}
+: ${stalwart_mail_user:="stalwart-mail"}
+: ${stalwart_mail_group:="stalwart-mail"}
+: ${stalwart_mail_config:="/usr/local/etc/stalwart-mail.toml"}
+: ${stalwart_mail_log:="/var/log/stalwart-mail.log"}
+: ${stalwart_mail_path:="/var/db/stalwart-mail"}
+: ${stalwart_mail_admin_secret:="CHANGEME"}
+
+command="/usr/sbin/daemon"
+task="/usr/local/bin/stalwart-mail"
+pidfile="/var/run/stalwart-mail/server.pid"
+procname="${task}"
+
+stalwart_mail_env="STALWART_PATH=${stalwart_mail_path} ADMIN_SECRET=${stalwart_mail_admin_secret}"
+
+command_args="-p ${pidfile} -T ${name} -o ${stalwart_mail_log} ${task} --config ${stalwart_mail_config}"
+
+start_precmd="${name}_prestart"
+
+stalwart_mail_prestart() {
+	if [ "${stalwart_mail_admin_secret}" = "CHANGEME" ]; then
+		echo "ERROR: The admin secret is set to the default value 'CHANGEME'."
+		echo "Please change the 'stalwart_mail_admin_secret' value in the rc file."
+		exit 1
+	fi
+
+	if [ ! -f "${stalwart_mail_log}" ]; then
+		touch "${stalwart_mail_log}"
+		chown ${stalwart_mail_user}:${stalwart_mail_group} "${stalwart_mail_log}"
+		chmod 640 "${stalwart_mail_log}"
+	fi
+
+	if [ ! -d "/var/run/codeberg-pages-server" ] ; then
+		install -d -o ${stalwart_mail_user} -g ${stalwart_mail_group} "/var/run/codeberg-pages-server"
+	fi
+}
+
+run_rc_command "$1"
