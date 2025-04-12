@@ -1,7 +1,7 @@
 PORTNAME=	stalwart-mail
 DISTVERSIONPREFIX=	v
 DISTVERSION=	0.11.7
-PORTREVISION=	2
+PORTREVISION=	3
 CATEGORIES=	mail
 
 MAINTAINER=	orville@anislet.dev
@@ -71,8 +71,8 @@ USERS=	stalwart-mail
 GROUPS=	stalwart-mail
 
 post-install:
-	${INSTALL} -m0600 ${WRKSRC}/resources/config/config.toml \
-		${STAGEDIR}${PREFIX}/etc/${PORTNAME}.toml.sample
+	${INSTALL_DATA} ${WRKSRC}/resources/config/config.toml \
+		${STAGEDIR}${ETCDIR}/${PORTNAME}.toml.sample
 
 	@${MKDIR} ${STAGEDIR}/var/db/stalwart-mail
 	@${MKDIR} ${STAGEDIR}/var/db/stalwart-mail/data
