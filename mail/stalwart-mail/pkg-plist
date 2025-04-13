@@ -1,6 +1,6 @@
 bin/stalwart-mail
 bin/stalwart-cli
-@dir etc/stalwart-mail
-@sample etc/stalwart-mail/config.toml.sample
+@dir(stalwart-mail,stalwart-mail,755) etc/stalwart-mail
+@sample(stalwart-mail,stalwart-mail,640) etc/stalwart-mail/config.toml.sample
 @dir(stalwart-mail,stalwart-mail,755) /var/db/stalwart-mail
 @dir(stalwart-mail,stalwart-mail,755) /var/db/stalwart-mail/data
